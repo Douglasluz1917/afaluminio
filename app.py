@@ -362,12 +362,19 @@ else:
             else:
                 tipo_doc_pdf = "ORCAMENTO"
                 
-            valor_pedido = sum(item.get("Valor (R$)", 0.0) for item in st.session_state["carrinho"])
+                valor_pedido = sum(item.get("Valor (R$)", 0.0) for item in st.session_state["carrinho"])
             pdf_bytes = gerar_pdf_3_vias(st.session_state['carrinho'], valor_pedido, cliente_selecionado, tel_selecionado, end_selecionado, tipo_doc=tipo_doc_pdf)
-            b64 = base64.b64encode(pdf_bytes).decode()
-            pdf_display = f'<embed src="data:application/pdf;base64,{b64}" width="100%" height="520" type="application/pdf">'
-            st.markdown(pdf_display, unsafe_allow_html=True)
-            del st.session_state['gerar_pdf_agora']
+            
+            st.info("👇 O documento foi gerado com sucesso! Clique no botão abaixo para abrir.")
+            
+            st.download_button(
+                label="🖨️ ABRIR PDF PARA IMPRESSÃO",
+                data=pdf_bytes,
+                file_name="AF_Aluminio_Pedido.pdf",
+                mime="application/pdf",
+                type="primary",
+                use_container_width=True
+            )
 
     
     elif menu == "👥 Cadastro de Clientes":
